@@ -24,16 +24,16 @@
   display: block;
 }
 .steps-bgc {
-  background-color: rgba(255, 255, 255, 0);
+  background-color: rgba(255, 255, 255, 0.9);
   width: 90%;
   height: 10%;
   margin: 5% auto;
 }
 .ivu-steps .ivu-steps-head {
-  background-color: rgba(255, 255, 255, 0);
+  background-color: rgba(255, 255, 255, 0.9);
 }
 .ivu-steps .ivu-steps-title {
-  background-color: rgba(255, 255, 255, 0);
+  background-color: rgba(255, 255, 255, 0.9);
 }
 </style>
 

@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid " style=" display:flex; height:800px;">
+  <div class="container-fluid " style=" display:flex; height:750px;">
     <ul class="nav navbar-left navbar-default navSelf col-md-2">
       <li>
         <router-link to="/shopInfo" name="sellerinfors">My Shop</router-link>

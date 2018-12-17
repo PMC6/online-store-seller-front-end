@@ -110,7 +110,7 @@ export default {
   width: 80%;
   height: 400px;
   margin: 0 auto;
-  background-color: rgba(255, 255, 255, 0.8);
+  background-color: rgba(255, 255, 255, 0.9);
   border: 1px solid rgb(141, 139, 211);
 }
 .seller-infos img {

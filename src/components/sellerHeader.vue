@@ -8,13 +8,14 @@
     </div>
     <!-- 右侧用户头像 -->
     <div class="quit">
-      <Dropdown >
+      <Dropdown>
         <a href="javascript:void(0)">
           <img :src="image" :alt="username">
         </a>
         <DropdownMenu slot="list">
           <DropdownItem>Home</DropdownItem>
-          <DropdownItem >signout</DropdownItem>
+         <DropdownItem>changeInfors</DropdownItem>
+         <DropdownItem>signout</DropdownItem>
         </DropdownMenu>
       </Dropdown>
     </div>
@@ -26,7 +27,7 @@ export default {
   data() {
     return {
       visible: false,
-      username:'',
+      username: "",
       image: require("../assets/li.jpg")
     };
   },

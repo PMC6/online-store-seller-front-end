@@ -9,15 +9,17 @@
         autofocus
         x-webkit-speech
         v-model="searchname"
+        @keyup.enter="search"
       >
-      <button type="submit" class="btn searchBtn btn-primary" @click="search">search</button>
+      <!-- <button type="submit" class="btn searchBtn btn-primary" >search</button> -->
     </div>
     <!--商品一览-->
     <div style="display:flex;" class="products-order row">
-      <button type="submit" class="btn col-sm-4" @click="getbyprice" v-model="priceBut">Price</button>
-      <button type="submit" class="btn col-sm-4" @click="getbynum" v-model="numBut">Num</button>
+      <button type="submit" class="btn col-sm-3" @click="getbyprice" v-model="priceBut">Price</button>
+      <button type="submit" class="btn col-sm-3" @click="getbynum" v-model="numBut">Num</button>
+      <button type="submit" class="btn col-sm-3" @click="getbysales" v-model="salesBtn">Sales</button>
       <!--商品添加-->
-      <button class="btn col-sm-4" @click="addProduct">Add</button>
+      <button class="btn col-sm-3" @click="addProduct">Add</button>
     </div>
     <!-- 商品简略 -->
     <div class="content">
@@ -28,6 +30,7 @@
             <th>Name</th>
             <th>Price</th>
             <th>Num</th>
+            <th>Left</th>
           </tr>
         </thead>
         <tbody>
@@ -38,6 +41,7 @@
             <td class="add-td" @click="()=>{productDetail(items)}">{{items.name}}</td>
             <td class="add-td" @click="()=>{productDetail(items)}">{{items.price}}</td>
             <td class="add-td" @click="()=>{productDetail(items)}">{{items.number}}</td>
+            <td class="add-td" @click="()=>{productDetail(items)}">{{items.left}}</td>
             <td>
               <button
                 type="button"
@@ -72,7 +76,7 @@
 } */
 
 .search {
-  width: 50%;
+  width: 30%;
   margin: 2% auto;
 }
 .add-td {
@@ -85,12 +89,12 @@
   border: none;
 }
 .input-search {
-  height: 40px;
+  height: 30px;
   border: 2px solid rgba(125, 140, 218, 1);
   border-radius: 50em;
 }
 .input {
-  width: 70%;
+  width: 95%;
   height: 100%;
   border: none;
   background-color: rgba(255, 255, 255, 0);

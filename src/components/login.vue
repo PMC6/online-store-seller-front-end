@@ -85,17 +85,20 @@ import storage from '../model/storage.js'
     padding:0;
     width:100%;
     height:600px;
-    background-color: red;
+    background-image:url(../assets/bgi.png);
 }
 #login{
-     width:40%;
+     width:30%;
      height:50%;
      margin:5% auto;
-     background-color: rgba(124, 192, 223, 0.5);
+     background-color: rgba(255, 255, 255, 0.7);
 }
  Form{
-     margin:20% auto;
-     width:50%;
+     /* margin:50px auto;*/
+     position: relative;
+     top:20%;
+     margin:0 auto;
+     width:50%; 
  }
  Button{
      margin-left:35%;
