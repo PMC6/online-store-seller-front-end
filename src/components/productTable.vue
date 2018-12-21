@@ -1,7 +1,6 @@
 <template>
-<!-- 管理商品模块中的商品列表 -->
+  <!-- 管理商品模块中的商品列表 -->
   <div class="contents" id="lynContent">
-   
     <!--搜索框-->
     <div class="search input-search">
       <input
@@ -14,50 +13,45 @@
         @keyup.enter="search"
       >
     </div>
+    <loading v-show="loadingshow"></loading>
     <!--商品一览-->
     <div style="display:flex;" class="products-order row">
-      <button type="submit" class="btn col-sm-3" @click="getbyprice" v-model="priceBut">Price</button>
-      <button type="submit" class="btn col-sm-3" @click="getbynum" v-model="numBut">Num</button>
-      <button type="submit" class="btn col-sm-3" @click="getbysales" v-model="salesBtn">Sales</button>
+      <button type="submit" class="btn col-sm-3">Applied</button>
+      <button type="submit" class="btn col-sm-3">Not applied</button>
+      <button type="submit" class="btn col-sm-3">Sales</button>
       <!--商品添加-->
-      <button class="btn col-sm-3" @click="addProduct">Add</button>
+      <button class="btn col-sm-3">Price</button>
     </div>
-    <loading v-show="loadingshow"></loading>
     <!-- 商品简略 -->
     <div class="content">
       <table class="table">
         <thead>
           <tr>
-            <th>Image</th>
+            <th>Product Image</th>
             <th>Name</th>
             <th>Price</th>
+            <th>Number</th>
             <th>Status</th>
-            <th>Left</th>
             <th>Operation</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="items in goods" datecontent>
-            <td >
-              <img :src="items.image" alt="image" width="50" height="50" >
+          <tr v-for="items in goods">
+            <td>
+              <img :src="items.image" alt="image" width="50" height="50">
             </td>
             <td class="add-td" @click="()=>{productDetail(items)}">{{items.name}}</td>
             <td class="add-td" @click="()=>{productDetail(items)}">{{items.price}}</td>
-            <td class="add-td" @click="()=>{productDetail(items)}">{{items.homePage}}</td>
-            <td class="add-td" @click="()=>{productDetail(items)}">{{items.number}}</td>
-            <!-- <td class="add-td" @click="()=>{productDetail(items)}">{{items.left}}</td> -->
+<td class="add-td" @click="()=>{productDetail(items)}">{{items.number}}</td>
+            <td class="add-td" @click="()=>{productDetail(items)}">{{items.status}}</td>
+            
             <td>
               <button
                 type="button"
                 class="add-s btn btn-search"
-                @click="()=>{productDetail(items)}"
-              >Detail</button>
-              <button
-                type="button"
-                class="btn btn-delete"
-                data-id="delBtn"
-                @click="()=>{deleteall(items.id)}"
-              >Delete</button>
+                @click="()=>{applyAdvertise(items)}"
+              >Apply</button>
+              <button type="button" class="btn btn-delete" data-id="delBtn">Canael</button>
             </td>
           </tr>
         </tbody>
@@ -69,7 +63,7 @@
       :total="100"
       prev-text="Previous"
       next-text="Next"
-      @on-change="pageChange"
+      @on-change="test()"
       :current.sync="currentpage"
     />
   </div>
@@ -176,14 +170,15 @@ export default {
   data() {
     return {
       // Note 'isActive' is left out and will not appear in the rendered table
+
       category: "",
       info: "",
       image: "",
       shopId: "",
       number: "",
       userId: "",
-      homePage: true,
-
+      condition: "",
+      homePage:'',
       page: "0",
       size: "5",
       positive: "",
@@ -193,7 +188,7 @@ export default {
       currentpage: 1,
       numBut: 0,
       priceBut: 0,
-      salesBtn:0,
+      salesBtn: 0,
       id: "",
 
       loadingshow:false
@@ -207,18 +202,20 @@ export default {
   },
   //自动加载
   mounted() {
-    let that= this;
     this.paginations();
     Bus.$on("txt", function(val) {
-      this.goods.push(val.image, val.name, val.price, val.number);
+      this.goods.push(
+        val.image,
+        val.name,
+        val.price,
+        val.number,
+        val.status
+      );
     });
-    Bus.$on("addProductSaveEvent", function(data){
-      that.pageChange();
-    })
   },
 
   methods: {
-    pageChange() {
+    test() {
       /* to the currentpage*/
       if (this.numBut == 0 && this.priceBut == 0) {
         axios
@@ -274,14 +271,9 @@ export default {
           });
       }
     },
-
-    addProduct() {
-      this.$parent.detailshow = false;
-      this.$parent.addshow = true;
-    },
-    productDetail(items) {
-      this.$parent.detailshow = false;
-      this.$parent.displayshow = true;
+    applyAdvertise(items) {
+      this.$parent.tableshow = false;
+      this.$parent.applyshow = true;
       console.log(items);
 
       // alert(JSON.stringify(items));
@@ -296,7 +288,8 @@ export default {
         info: items.info,
         number: items.number,
         userId: items.userId,
-        status: items.homePage
+        homePage: items.homePage,
+        status:items.status
       });
     },
 
@@ -311,33 +304,6 @@ export default {
         })
         .then(response => {
           this.goods = response.data.data;
-          console.log(response)
-        })
-        .catch(err => {
-          console.error(err.response);
-        });
-    },
-
-    deleteall(id) {
-      axios
-        .delete("/seller/product/delete", {
-          params: { id }
-        })
-        .then(response => {
-          axios
-            .get("/seller/product/list", {
-              params: {
-                page: this.page,
-                size: this.size,
-                positive: false
-              }
-            })
-            .then(response => {
-              this.goods = response.data.data;
-            })
-            .catch(err => {
-              console.error(err.response);
-            });
         })
         .catch(err => {
           console.error(err.response);
@@ -389,9 +355,8 @@ export default {
           console.error(err.response);
         });
     },
-    getbysales(){
+    getbysales() {
       //按照销量排序
-      
     },
     search() {
       if (this.searchname != null) {
@@ -407,7 +372,7 @@ export default {
             let products = [];
             products[0] = response.data.data;
             this.goods = products;
-            // console.log(JSON.stringify(this.goods[0]));
+            console.log(JSON.stringify(this.goods[0]));
           })
           .catch(err => {
              this.loadingshow=false;
@@ -415,11 +380,12 @@ export default {
             // alert("there is nothing named " + this.searchname);
             this.$Message.info("there is nothing named " + this.searchname);
             // console.error(err.response);
-          });
+         
+         });
+      }
       }
     }
-  }
-};
+  };
 </script>
 
 
