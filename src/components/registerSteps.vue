@@ -1,7 +1,8 @@
 <template>
+<!-- 申请店铺步骤 -->
   <div>
-    <div class="R-tips">
-      <Steps :current="current" class="steps-bgc">
+    <div class="R-tips" >
+      <Steps :current="current" class="steps-bgc" >
         <Step title="Read The Rules" content></Step>
         <Step title="Seller Information" content></Step>
         <Step title="Store Information" content></Step>
@@ -24,16 +25,16 @@
   display: block;
 }
 .steps-bgc {
-  background-color: rgba(255, 255, 255, 0);
+  background-color: rgba(255, 255, 255, 0.9);
   width: 90%;
   height: 10%;
   margin: 5% auto;
 }
 .ivu-steps .ivu-steps-head {
-  background-color: rgba(255, 255, 255, 0);
+  background-color: rgba(255, 255, 255, 0.9);
 }
 .ivu-steps .ivu-steps-title {
-  background-color: rgba(255, 255, 255, 0);
+  background-color: rgba(255, 255, 255, 0.9);
 }
 </style>
 

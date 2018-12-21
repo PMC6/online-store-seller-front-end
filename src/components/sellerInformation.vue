@@ -110,22 +110,22 @@ export default {
   width: 80%;
   height: 400px;
   margin: 0 auto;
-  background-color: rgba(255, 255, 255, 0.8);
+  background-color: rgba(255, 255, 255, 0.9);
   border: 1px solid rgb(141, 139, 211);
 }
 .seller-infos img {
-  width: 100px;
-  height: 100px;
+  width: 150px;
+  height:150px;
   background-color: #0099cc;
   position: relative;
 
   left: 15%;
-  margin-top: 20%;
+  margin-top: 12%;
 }
 .seller-infos-table {
   float: right;
-  margin-top: 5%;
-  margin-right: 20px;
+  margin-top: 10%;
+  margin-right: 100px;
 }
 .btn-seller {
   width: 65px;

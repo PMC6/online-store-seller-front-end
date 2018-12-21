@@ -1,7 +1,7 @@
 <template>
   <div class="navbar-right shop-infors">
     <div class="shop-infos-table">
-      <form>
+      <div>
         <div class="form-group row">
           <label class="col-sm-3 col-form-label"></label>
           <div class="col-sm-7">
@@ -13,14 +13,21 @@
         <div class="form-group row">
           <label class="col-sm-3 col-form-label">shop name</label>
           <div class="col-sm-7">
-            <input type="text" class="form-control" placeholder v-model="storename">
+            <input type="text" class="form-control" placeholder v-model="storename" readonly>
           </div>
         </div>
         <!--seller name-->
         <div class="form-group row">
           <label class="col-sm-3 col-form-label">seller name</label>
           <div class="col-sm-7">
-            <input type="text" class="form-control" placeholder v-model="sellername">
+            <input type="text" class="form-control" placeholder v-model="sellername" readonly>
+          </div>
+        </div>
+        <!-- email -->
+        <div class="form-group row">
+          <label class="col-sm-3 col-form-label">email</label>
+          <div class="col-sm-7">
+            <input type="text" class="form-control" placeholder v-model="email">
           </div>
         </div>
         <!--Telphone-->
@@ -48,14 +55,14 @@
         </div>
         <!--Button-->
         <div class="form-group row">
-          <div class="col-sm-5">
+          <!-- <div class="col-sm-5">
             <button type="submit" class="btn btn-primary btn-seller" @click="update">update</button>
-          </div>
-          <div class="col-sm-5">
+          </div> -->
+          <div class="col-sm-10" style="text-align:center;">
             <button type="submit" class="btn btn-primary btn-seller" @click="saveUpdate">save</button>
           </div>
         </div>
-      </form>
+      </div>
     </div>
   </div>
 </template>
@@ -91,15 +98,26 @@ export default {
       sellername: "",
       IDcard: "",
       tel: "",
-      address: ""
+      address: "",
+      email:''
     };
   },
   methods: {
-    update() {
-      //点击按钮，使部分元件可编辑
-    },
+    
     saveUpdate() {
       //点击按钮，保存修改的店铺信息
+      axios.put('/seller/shop/update',{
+        name:this.storename,
+        image:this.image,
+        info:this.description,
+        telephone:this.tel,
+        email:this.email
+      }).then(response=>{
+        console.log(response);
+      }).catch(err=>{
+        console.log(err);
+      })
+
     }
   },
   mounted(){
@@ -110,9 +128,10 @@ export default {
       this.tel = response.data.data.user.telephone;
       this.description = response.data.data.info;
       this.image = response.data.data.image;
+      this.email=response.data.data.user.email;
       // this.category = response.data.data.shop.category;
     }).catch(err=>{
-      this.$router.push("/")
+      this.$router.push("/sellermain")
     })
   }
 };

@@ -13,7 +13,7 @@
     </div>
 
     <!--ShopName-->
-    <form class="seller-infos-table">
+    <div class="seller-infos-table">
       <div class="form-group row">
         <label for="inputEmail3" class="col-sm-3 col-form-label">ShopName</label>
         <div class="col-sm-9">
@@ -37,8 +37,8 @@
             class="form-control"
             placeholder
             v-model="telephone"
-            pattern="^[1][0-9]{10}"
           >
+          <!-- pattern="^[1][0-9]{10}" -->
         </div>
       </div>
 
@@ -46,7 +46,7 @@
       <div class="form-group row">
         <label class="col-sm-3 col-form-label">Email</label>
         <div class="col-sm-9">
-          <input type="text" class="form-control" placeholder v-model="email" pattern>
+          <input type="text" class="form-control" placeholder v-model="email">
         </div>
       </div>
 
@@ -67,7 +67,7 @@
           <button type="submit" class="btn btn-primary btn-seller" @click="tofourstep">Save</button>
         </div>
       </div>
-    </form>
+    </div>
   </div>
 </template>
 <script>
@@ -143,10 +143,10 @@ export default {
       reader.readAsDataURL(file);
 
       reader.onload = function(e) {
-        if (this.result.length < 25600) {
+        if (this.result.length < 61440) {
           that.image = this.result;
         } else {
-          alert("The size of img must small than 25k");
+          alert("The size of img must small than 60k");
           that.image = require("../assets/预设头像.png");
         }
       };

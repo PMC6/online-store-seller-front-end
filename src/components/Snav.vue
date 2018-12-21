@@ -1,18 +1,20 @@
 <template>
-  <div class="container-fluid " style=" display:flex; height:800px;">
+  <div class="container-fluid " style=" display:flex; height:750px;">
+    <!--  -->
     <ul class="nav navbar-left navbar-default navSelf col-md-2">
-      <li>
-        <router-link to="/shopInfo" name="sellerinfors">My Shop</router-link>
+      <li @click="shopRouter">
+        <router-link :to="myShopLink" name="sanv">MyShop</router-link>
       </li>
       <li>
         <router-link to="/managemain">Manage Products</router-link>
       </li>
       <li>
-        <router-link to>Manage Order</router-link>
+        <router-link to="/manageadvertise">Manage Advertisement</router-link>
       </li>
       <li>
-        <router-link to>Manage Advertisement</router-link>
+        <router-link to>Manage Order</router-link>
       </li>
+      
       <li>
         <router-link to>Sales History</router-link>
       </li>
@@ -24,8 +26,8 @@
       </li>
       
     </ul>
-    <div class="col-md-10" style="margin-left:15px;">
-      <router-view></router-view>
+    <div class="col-md-10" style="margin-left:15px; background-color:rgba(255,255,255,0.9);">
+      <router-view ></router-view>
     </div>
   </div>
 </template>
@@ -35,27 +37,27 @@
   padding: 0;
 }
 
-.navbar-left > li a:hover,
-.navbar-left > li a:focus ,
-.navbar-left > li a:visited,
-.navbar-left > li a:active
+li a:hover,
+li a:focus ,
+li a:visited,
+li a:active
 {
   text-decoration: none;
   background-color: rgba(125, 140, 218, 0.9);
 }
-.navbar-left > li {
+li {
   display: block;
   width: 100%;
-  background:rgba(255,255,255,0.1);
+  background:transparent;
   height: 50px;
   /* border: 1px solid rgb(28, 30, 139,0.5); */
   /* border-radius: 5%; */
 }
-.navbar-left > li a {
+li a {
   display: block;
   color: #ccc;
   text-align: center;
-  width: 100%;
+  width: 200px;
   height: 100%;
   line-height: 50px;
 }
@@ -70,17 +72,24 @@ import axios from 'axios'
 export default {
   data() {
     return {
-      myShopLink: '/',
+      myShopLink: '/sellermain',
+      name:"test",
+      // shopRouter:"",
     }
   },
-  shopRouter(){
-    alert("hello");
+  methods:{
+    shopRouter(){
+    // alert("hello");
+    // alert(this.name);
+
     axios.get('/seller/shop/info')
       .then(response=>{
         this.myShopLink="/shopInfo";
       }).catch(err=>{
-        this.myShopLink="/";
+        this.myShopLink="/sellermain";
     })
+  }
+  
   }
   // mounted(){
   //   axios.post('/api/user/login',{

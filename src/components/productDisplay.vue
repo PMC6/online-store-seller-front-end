@@ -1,4 +1,5 @@
 <template>
+<!-- 商品细节展示 -->
   <div>
     <div class="modal-header">
       <h4 class="modal-title" id="gridSystemModalLabel">Products Of Details</h4>
@@ -87,7 +88,7 @@
                   </div>
                 </div>
 
-                <div class="form-group row">
+                <!-- <div class="form-group row">
                   <label class="col-sm-3 col-form-label">HomePage</label>
                   <div class="col-sm-9">
                     <input
@@ -98,8 +99,17 @@
                             v-model="homePage"
                     >
                   </div>
-                </div>
-
+                </div> -->
+<div class="form-group row">
+            <label class="col-sm-3 col-xs-3 control-label">HomePage:</label>
+            <div class="col-sm-9 col-xs-9">
+              <!--<input class="form-control input-sm duiqi" v-model="homepage">-->
+              <select class="form-control" id="homePage" v-model="homepage">
+                <option>True</option>
+                <option>False</option>
+              </select>
+            </div>
+          </div>
                 <div class="form-group row">
                   <div class="col-sm-5">
                     <button type="button" class="btn btn-primary btn-seller" @click="back">cancel</button>
@@ -206,6 +216,7 @@ update(){
            category:this.category
 
          }).then((response) => {
+           alert("success")
 
          }).catch((err) => {
            alert(JSON.stringify(err.message.data));

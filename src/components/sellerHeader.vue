@@ -8,13 +8,23 @@
     </div>
     <!-- 右侧用户头像 -->
     <div class="quit">
-      <Dropdown >
+      <Dropdown @on-hover-click="test" trigger="click" @on-clickoutside="test1">
         <a href="javascript:void(0)">
           <img :src="image" :alt="username">
         </a>
         <DropdownMenu slot="list">
-          <DropdownItem>Home</DropdownItem>
-          <DropdownItem >signout</DropdownItem>
+          <DropdownItem :name="home"><button @click="toHome">Home</button></DropdownItem>
+          <DropdownItem :name="advertisement">
+            <button @click="toAdvertisement">Advertisement</button>
+          </DropdownItem>
+          <DropdownItem :name="personinformation">personal information</DropdownItem>
+          <DropdownItem :name="changepassword">
+            <!-- <router-link to="changepassword">changepassword</router-link> -->
+            <button @click="changepassword">changepassword</button>
+          </DropdownItem>
+          <DropdownItem :name="signout">
+            <a @click="signout">signout</a>
+          </DropdownItem>
         </DropdownMenu>
       </Dropdown>
     </div>
@@ -26,8 +36,9 @@ export default {
   data() {
     return {
       visible: false,
-      username:'',
-      image: require("../assets/li.jpg")
+      username: "",
+      image: require("../assets/li.jpg"),
+      name: ""
     };
   },
   methods: {
@@ -36,6 +47,30 @@ export default {
     },
     handleClose() {
       this.visible = false;
+    },
+
+    test() {},
+    signout() {
+      axios
+        .get("/user/login")
+        .then(res => {})
+        .catch(err => {});
+    },
+    toAdvertisement(){
+      this.$parent.advertiseshow=true;
+      this.$parent.mainshow=false;
+      this.$parent.changepasswordshow=false;
+    },
+    toHome(){
+      this.$parent.mainshow=true;
+      this.$parent.advertiseshow=false;
+      this.$parent.changepasswordshow=false;
+    },
+    changepassword(){
+      this.$parent.changepasswordshow=true;
+      this.$parent.mainshow=false;
+      this.$parent.advertiseshow=false;
+
     }
   },
   mounted() {
@@ -44,6 +79,18 @@ export default {
 };
 </script>
 <style scoped>
+button{
+  background-color: #fff;
+  border:none;
+  color:#666;
+  width:100px;
+}
+a {
+  color: #666;
+}
+a:hover {
+  text-decoration: none;
+}
 .quit {
   float: right;
 }

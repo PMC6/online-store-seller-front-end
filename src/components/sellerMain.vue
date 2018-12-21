@@ -14,7 +14,7 @@
 <style scoped>
     .navbar-right{
         height:100%;
-         background-color:rgb(255, 255, 255,0.8);
+         background-color:rgba(255, 255, 255,0.9);
          width:100%;
          border:1px solid #ccc;
          border-radius: 1%;

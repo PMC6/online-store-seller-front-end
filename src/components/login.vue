@@ -1,14 +1,15 @@
 <template>
+<!-- 登录 -->
 <div class="log">
     <div id="login">
     <Form ref="formInline" :model="formInline" :rules="ruleInline"  >
         <FormItem prop="user">
-            <Input type="text" v-model="formInline.user" placeholder="Username" >
+            <Input type="text" v-model="formInline.user" placeholder="Username" autofocus clearable="">
                 <Icon type="ios-person-outline" slot="prepend"></Icon>
            </Input>
         </FormItem>
-        <FormItem prop="password">
-            <Input type="password" v-model="formInline.password" placeholder="Password">
+        <FormItem prop="password" >
+            <Input type="password" v-model="formInline.password" placeholder="Password" @on-enter="handleSubmit('formInline')" clearablec>
                 <Icon type="ios-lock-outline" slot="prepend"></Icon>
             </Input>
         </FormItem>
@@ -62,8 +63,12 @@ import storage from '../model/storage.js'
                             storage.set('telephone', response.data.data.principal.telephone);
                             storage.set('email', response.data.data.principal.email);
                             if(response.data.data.principal.roles.length == 2){
+                                storage.set("role", "seller");
                                 this.$router.push({path:"/shopInfo"});
-                            }else this.$router.push({path:"/"});
+                            }else {
+                                this.$router.push({path:"/sellermain"});
+                                storage.set("role", "customer");
+                            }
 
                         }).catch(err=>{
                           alert("Account password mismatch");
@@ -85,17 +90,21 @@ import storage from '../model/storage.js'
     padding:0;
     width:100%;
     height:600px;
-    background-color: red;
+    background-image:url(../assets/bgi.png);
+    background-size: cover;
 }
 #login{
-     width:40%;
+     width:30%;
      height:50%;
      margin:5% auto;
-     background-color: rgba(124, 192, 223, 0.5);
+     background-color: rgba(255, 255, 255, 0.7);
 }
  Form{
-     margin:20% auto;
-     width:50%;
+     /* margin:50px auto;*/
+     position: relative;
+     top:20%;
+     margin:0 auto;
+     width:50%; 
  }
  Button{
      margin-left:35%;

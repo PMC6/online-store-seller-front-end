@@ -13,7 +13,7 @@ Vue.use(iView);
 
 axios.defaults.withCredentials=true
 axios.defaults.baseURL="http://39.98.165.19:8080"
-
+// http://176.122.152.6:8080
 Vue.prototype.$http=axios;
 
 Vue.config.productionTip = false;
@@ -27,12 +27,41 @@ import snav from './components/Snav'
 import rules from './components/Rules'
 import shopinfors from './components/shopInformation'
 import login from './components/login'
-
+import advertise from './components/advertisement'
+import allproducts from './components/Allproducts'
+import advertisehomepage from './components/AdvertiseHomepage'
+import manageadvertise from './components/ManageAdvertisement'
+import changepassword from './components/changePassword'
+import home from './components/home'
 const router=new Router({
   mode:'history',
   routes:[
+    {
+      path:'/home',
+      name:'home',
+      component:home
+    },
+    {
+      path:'/changepassword',
+      name:'changepassword',
+      component:changepassword
+    },
+    {
+      path:'/manageadvertise',
+      component:manageadvertise
+    },
+    {
+      path:'/advertise/advertisehomepage',
+      name:'advertisehomepage',
+      component:advertisehomepage
+    },
+    {
+      path:'/advertise/allproducts',
+      name:'allproducts',
+      component:allproducts
+    },
    {
-   path: '/',
+   path: '/sellermain',
    name:'sellermain',
    component:sellermain
    },
@@ -56,8 +85,17 @@ const router=new Router({
   {
     path:'/login',
     component:login
+  },
+  {
+    path:'/advertise',
+    component:advertise
   }
-]
+],
+components:{
+  default:home,
+  advertise:advertise,
+  shopInfo:shopinfors
+}
 })
 /* eslint-disable no-new */
 new Vue({
