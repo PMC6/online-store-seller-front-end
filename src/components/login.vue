@@ -91,7 +91,10 @@ import storage from '../model/storage.js'
     width:100%;
     height:600px;
     background-image:url(../assets/bgi.png);
+<<<<<<< HEAD
     background-size: cover;
+=======
+>>>>>>> e8923f1bfd05f5b20f3c44f86be7bb685b3a4f26
 }
 #login{
      width:30%;

@@ -13,6 +13,10 @@
         v-model="searchname"
         @keyup.enter="search"
       >
+<<<<<<< HEAD
+=======
+      <!-- <button type="submit" class="btn searchBtn btn-primary" >search</button> -->
+>>>>>>> e8923f1bfd05f5b20f3c44f86be7bb685b3a4f26
     </div>
     <!--商品一览-->
     <div style="display:flex;" class="products-order row">
@@ -31,9 +35,14 @@
             <th>Image</th>
             <th>Name</th>
             <th>Price</th>
+<<<<<<< HEAD
             <th>Status</th>
             <th>Left</th>
             <th>Operation</th>
+=======
+            <th>Num</th>
+            <th>Left</th>
+>>>>>>> e8923f1bfd05f5b20f3c44f86be7bb685b3a4f26
           </tr>
         </thead>
         <tbody>
@@ -45,7 +54,11 @@
             <td class="add-td" @click="()=>{productDetail(items)}">{{items.price}}</td>
             <td class="add-td" @click="()=>{productDetail(items)}">{{items.homePage}}</td>
             <td class="add-td" @click="()=>{productDetail(items)}">{{items.number}}</td>
+<<<<<<< HEAD
             <!-- <td class="add-td" @click="()=>{productDetail(items)}">{{items.left}}</td> -->
+=======
+            <td class="add-td" @click="()=>{productDetail(items)}">{{items.left}}</td>
+>>>>>>> e8923f1bfd05f5b20f3c44f86be7bb685b3a4f26
             <td>
               <button
                 type="button"

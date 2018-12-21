@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <template>
     <div class="navbar-right ">
        
@@ -42,3 +43,49 @@
 </script>
 
 
+=======
+<template>
+    <div class="navbar-right ">
+       
+        <registershopb v-show="buttonshow"></registershopb>
+       
+        <div v-show='isShow'>
+           <registersteps></registersteps>
+        </div>
+
+       
+        
+    </div>
+</template>
+<style scoped>
+    .navbar-right{
+        height:100%;
+         background-color:rgba(255, 255, 255,1);
+         width:100%;
+         border:1px solid #ccc;
+         border-radius: 1%;
+    }
+    
+</style>
+<script>
+    import registershopBtn from './registerShopButton'
+    import registersteps from './registerSteps'
+
+    export default {
+        data(){
+            return {
+                isShow:false,
+                buttonshow:true
+
+            }
+        },
+        components:{
+            'registershopb':registershopBtn,
+            'registersteps':registersteps
+            
+        }
+    }
+</script>
+
+
+>>>>>>> e8923f1bfd05f5b20f3c44f86be7bb685b3a4f26

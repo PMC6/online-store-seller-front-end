@@ -1,6 +1,9 @@
 <template>
   <div class="container-fluid " style=" display:flex; height:750px;">
+<<<<<<< HEAD
     <!--  -->
+=======
+>>>>>>> e8923f1bfd05f5b20f3c44f86be7bb685b3a4f26
     <ul class="nav navbar-left navbar-default navSelf col-md-2">
       <li @click="shopRouter">
         <router-link :to="myShopLink" name="sanv">MyShop</router-link>
