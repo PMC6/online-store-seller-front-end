@@ -1,4 +1,5 @@
 <template>
+<!-- 商品细节展示 -->
   <div>
     <div class="modal-header">
       <h4 class="modal-title" id="gridSystemModalLabel">Products Of Details</h4>
@@ -12,14 +13,9 @@
           <div class="modal-body">
             <div class="container-fluid">
               <div class="input-image">
-                <img :src="productImg" alt="product image" >
+                <img :src="image" alt="product image">
                 <br>
-                <input
-                        type="file"
-                        name="image"
-                        @change="changeImage($event)"
-                        accept="image/png, image/jpeg, image/gif, image/jpg"
-                >
+                <Picture></Picture>
               </div>
               <form class="seller-infos-table">
                 <div class="form-group row">
@@ -31,6 +27,7 @@
                             id="inputname"
                             placeholder
                             v-model="name"
+                            readonly="true"
                     >
                   </div>
                 </div>
@@ -87,19 +84,15 @@
                   </div>
                 </div>
 
-                <div class="form-group row">
-                  <label class="col-sm-3 col-form-label">HomePage</label>
-                  <div class="col-sm-9">
-                    <input
-                            type="text"
-                            class="form-control"
-
-                            placeholder
-                            v-model="homePage"
-                    >
-                  </div>
-                </div>
-
+<div class="form-group row">
+            <label class="col-sm-3 col-xs-3 control-label">HomePage</label>
+            <div class="col-sm-9 col-xs-9">
+              <select class="form-control" id="homePage" v-model="homePage">
+                <option :value="true">True</option>
+                <option :value="false">False</option>
+              </select>
+            </div>
+          </div>
                 <div class="form-group row">
                   <div class="col-sm-5">
                     <button type="button" class="btn btn-primary btn-seller" @click="back">cancel</button>
@@ -127,8 +120,8 @@
   }
   .input-image img {
     margin: 30% 0 5% 25%;
-    width: 100px;
-    height: 100px;
+    width: 300px;
+    height: 200px;
   }
   .input-image input {
     margin-left: 25%;
@@ -144,10 +137,11 @@
 <script>
 import axios from 'axios'
 import Bus from './bus.js'
+import Picture from './Picture.vue'
 
 export default {
   name: "ProductDisplay",
-
+  components:{Picture},
 
     data() {
         return {
@@ -159,9 +153,9 @@ export default {
             info:'',
             number:'',
             userId:'',
-            homePage:'',
+            homePage:true,
             createTime:'',
-            productImg: require("../assets/预设头像.png"),
+            image: require("../assets/预设头像.png"),
           selected:'',
         }
     },
@@ -170,10 +164,10 @@ export default {
         let self = this;
         Bus.$on('msg',(e) => {
             self.message = e;
-
             this.id=e.id;this.name=e.name;this.price=e.price;this.categoryName=e.category.name;
             this.info=e.info;this.number=e.number;this.homePage=e.homePage;this.category=e.category;
-            this.phone=e.telphone;this.productImg=e.image})
+            this.image=e.image;
+        })
     },
 
   methods: {
@@ -185,7 +179,7 @@ changeImage(e) {
    let that = this;
  reader.readAsDataURL(file);
  reader.onload = function(e) {
-   that.productImg = this.result;
+   that.image = this.result;
  };
 },
 back(){
@@ -194,18 +188,19 @@ back(){
 },
 
 update(){
-  // alert(this.category);
          axios.put('/seller/product/modify', {
            id:this.id,
            name: this.name,
            price: this.price,
            number: this.number,
            info: this.info,
-           homepage: this.homepage,
-           image: this.productImg,
+           homePage: this.homePage,
+           image: this.image,
            category:this.category
-
          }).then((response) => {
+           Bus.$emit('updateEvent', 'success');
+           console.log(response);
+           this.$Message.success("update success");
 
          }).catch((err) => {
            alert(JSON.stringify(err.message.data));

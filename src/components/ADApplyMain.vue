@@ -1,7 +1,6 @@
 <template>
-<!-- 管理商品模块中的商品列表 -->
+  <!-- 管理商品模块中的商品列表 -->
   <div class="contents" id="lynContent">
-
     <!--搜索框-->
     <div class="search input-search">
       <Input
@@ -15,48 +14,41 @@
         autofocus
       />
     </div>
+    <loading v-show="loadingshow"></loading>
     <!--商品一览-->
     <div style="display:flex;" class="products-order row">
-      <button type="submit" class="btn col-sm-4" @click="getbynum" v-model="numBut">Left</button>
-      <button type="submit" class="btn col-sm-4" @click="getbyprice" v-model="priceBut">Price</button>
-      <!--商品添加-->
-      <button class="btn col-sm-4" @click="addProduct">Add</button>
+      <!--<button type="submit" class="btn col-sm-3 col-xs-3" @click="getByApply">Applied</button>-->
+      <button type="submit" class="btn col-sm-4 col-xs-3" @click="getByNum">Left</button>
+      <button class="btn col-sm-4 col-xs-3" @click="getbyprice">Price</button>
+      <button class="btn col-sm-4 col-xs-3" @click="shopapply">Apply</button>
     </div>
-    <loading v-show="loadingshow"></loading>
     <!-- 商品简略 -->
-    <div class="content table-responsive">
+    <div class="content">
       <table class="table">
         <thead>
           <tr>
             <th>Product Image</th>
             <th>Name</th>
             <th>Price</th>
-            <th>Status</th>
-            <th>Left</th>
+            <th>Number</th>
             <th>Operation</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="items in goods">
-            <td >
-              <img :src="items.image" alt="image" width="50" height="50" >
+            <td>
+              <img :src="items.image" alt="image" width="50" height="50">
             </td>
-            <td class="add-td">{{items.name}}</td>
-            <td class="add-td">{{items.price}}</td>
-            <td class="add-td">{{items.homePage}}</td>
-            <td class="add-td">{{items.number}}</td>
+            <td class="add-td" @click="()=>{productDetail(items)}">{{items.name}}</td>
+            <td class="add-td" @click="()=>{productDetail(items)}">{{items.price}}</td>
+            <td class="add-td" @click="()=>{productDetail(items)}">{{items.number}}</td>
+
             <td>
               <button
                 type="button"
                 class="add-s btn btn-search"
-                @click="()=>{productDetail(items)}"
-              >Detail</button>
-              <button
-                type="button"
-                class="btn btn-delete"
-                data-id="delBtn"
-                @click="()=>{deleteall(items.id)}"
-              >Delete</button>
+                @click="()=>{applyAdvertise(items)}"
+              >Apply</button>
             </td>
           </tr>
         </tbody>
@@ -64,13 +56,13 @@
     </div>
 
     <!-- 分页 -->
-    <div class="page">
+    <div class="productApplyPage">
       <Page
         :total="totalProduct"
         :page-size="5"
         prev-text="Previous"
         next-text="Next"
-        @on-change="pageChange"
+        @on-change="test()"
         :current.sync="currentpage"
       />
     </div>
@@ -115,16 +107,12 @@
   position: relative;
   height: 450px;
 }
-
 .content table tbody td {
   width: 10%;
 
   line-height: 50px;
 }
 
-.page {
-  margin-top: 30px;
-}
 .page-D {
   /* padding-top: 100px;
   padding-left: 300px;
@@ -142,7 +130,9 @@
   width: 96%;
   margin: 0 auto;
 }
-
+.productApplyPage{
+  margin-top: 30px;
+}
 .btn {
   margin: 0;
   width: 30%;
@@ -176,34 +166,37 @@ import Bus from "./bus.js";
 import LynModal from "./addProduct.vue";
 import ProductDispaly from "./productDisplay.vue";
 import axios from "axios";
-import loading from './loading'
-
+import loading from "./loading";
+import storage from "../model/storage.js";
 export default {
   name: "Test",
   data() {
     return {
       // Note 'isActive' is left out and will not appear in the rendered table
+      totalProduct:5,
       category: "",
       info: "",
       image: "",
       shopId: "",
       number: "",
       userId: "",
-      homePage: true,
-
+      condition: "",
+      homePage: "",
       page: "0",
       size: "5",
       positive: "",
       goods: [],
+
       searchname: "",
       currentpage: 1,
       numBut: 0,
       priceBut: 0,
-      salesBtn:0,
-      id: "",
-      totalProduct:0,
-      loadingshow:false,
+      salesBtn: 0,
+      applyBtn: 0,
       searchBtn:false,
+      id: "",
+
+      loadingshow: false
     };
   },
 
@@ -214,27 +207,27 @@ export default {
   },
   //自动加载
   mounted() {
-    let that= this;
     this.paginations();
-    Bus.$on("txt", function(val) {
-      this.goods.push(val.image, val.name, val.price, val.number);
-    });
-    Bus.$on("addProductSaveEvent", function(data){
-      that.pageChange();
-    });
-    Bus.$on("updateEvent", function(data){
-      that.pageChange();
-    });
     axios.get("/seller/product/num")
       .then(response=>{
         this.totalProduct = response.data.data;
-      }).catch(()=>{
+        // alert(JSON.stringify(response));
+    }).catch(()=>{
       this.totalProduct = 5;
+    });
+
+    Bus.$on("txt", function(val) {
+      this.goods.push(val.image, val.name, val.price, val.number, val.status);
     });
   },
 
   methods: {
-    pageChange() {
+    shopapply(){
+      if (this.searchBtn) this.getProductNum();
+      this.$parent.tableshow=false;
+     this.$parent.shopapplyshow=true;
+    },
+    test() {
       /* to the currentpage*/
       if (!this.searchBtn){
         if (this.numBut == 0 && this.priceBut == 0) {
@@ -290,7 +283,7 @@ export default {
               console.error(err.response);
             });
         }
-      }else {
+      } else {
         axios
           .get("/seller/product/search", {
             params: {
@@ -310,24 +303,14 @@ export default {
           });
       }
     },
+    applyAdvertise(items) {
+      this.$parent.tableshow = false;
+      this.$parent.applyshow = true;
+      this.$parent.shopapplyshow=false;
+      console.log(items);
 
-    addProduct() {
-      if (this.searchBtn){
-        this.searchBtn=false;
-        this.searchname="";
-        this.getProductNum();
-      }
-      this.$parent.detailshow = false;
-      this.$parent.addshow = true;
-    },
-    productDetail(items) {
-      if (this.searchBtn){
-        this.searchBtn=false;
-        this.getProductNum();
-        this.searchname="";
-      }
-      this.$parent.detailshow = false;
-      this.$parent.displayshow = true;
+      // alert(JSON.stringify(items));
+
       Bus.$emit("msg", {
         id: items.id,
         email: items.email,
@@ -338,7 +321,8 @@ export default {
         info: items.info,
         number: items.number,
         userId: items.userId,
-        homePage: items.homePage
+        homePage: items.homePage,
+        status: items.status
       });
     },
 
@@ -353,56 +337,14 @@ export default {
         })
         .then(response => {
           this.goods = response.data.data;
-          console.log(response)
         })
         .catch(err => {
           console.error(err.response);
         });
     },
 
-    deleteall(id) {
-      this.$Modal.confirm({
-        title:"Are you sure to update you shop's information?",
-        onOk: ()=>{
-          axios
-            .delete("/seller/product/delete", {
-              params: { id: id }
-            })
-            .then(response => {
-              axios
-                .get("/seller/product/list", {
-                  params: {
-                    page: 0,
-                    size: this.size,
-                    positive: false
-                  }
-                })
-                .then(response => {
-                  this.goods = response.data.data;
-                  this.currentpage=1;
-                  if (this.totalProduct > 0) this.totalProduct -= 1;
-                })
-                .catch(err => {
-                  this.goods = [];
-                  this.currentpage=1;
-                  if (this.totalProduct > 0) this.totalProduct -= 1;
-                  console.error(err.response);
-                });
-            })
-            .catch(err => {
-              console.error(err.response);
-            });
-        }
-      })
-
-    },
-
     getbyprice() {
-      if (this.searchBtn){
-        this.searchBtn=false;
-        this.getProductNum();
-        this.searchname="";
-      }
+      if (this.searchBtn) this.getProductNum();
       if (this.priceBut == 0 || this.priceBut == 2) this.priceBut = 1;
       else if (this.priceBut == 1) this.priceBut = 2;
       this.numBut = 0;
@@ -424,20 +366,9 @@ export default {
           console.error(err.response);
         });
     },
-    getProductNum(){
-      axios.get("/seller/product/num")
-        .then(response=>{
-          this.totalProduct = response.data.data;
-        }).catch(()=>{
-        this.totalProduct = 5;
-      });
-    },
-    getbynum() {
-      if (this.searchBtn){
-        this.searchBtn=false;
-        this.getProductNum();
-        this.searchname="";
-      }
+
+    getByNum() {
+      if (this.searchBtn) this.getProductNum();
       if (this.numBut == 0 || this.numBut == 2) this.numBut = 1;
       else if (this.numBut == 1) this.numBut = 2;
       this.priceBut = 0;
@@ -459,23 +390,33 @@ export default {
           console.error(err.response);
         });
     },
+    getProductNum() {
+      this.searchBtn=false;
+      this.searchname="";
+      axios.get("/seller/product/num")
+        .then(response=>{
+          this.totalProduct = response.data.data;
+        }).catch(()=>{
+        this.totalProduct = 5;
+      });
+    },
     search() {
       this.searchBtn=true;
-      this.loadingshow=true;
+      this.loadingshow = true;
       axios
         .get("/seller/product/search", {
           params: {
             name: this.searchname,
-            page:0,
-            size:this.size
+            page: 0,
+            size: this.size
           }
         })
         .then(response => {
-          this.loadingshow=false;
+          this.loadingshow = false;
           this.goods = response.data.data;
         })
         .catch(err => {
-          this.loadingshow=false;
+          this.loadingshow = false;
           this.goods = [];
           this.$Message.info("there is nothing named " + this.searchname);
         });
@@ -489,6 +430,31 @@ export default {
         }).catch(e=>{
         console.log(e);
       })
+    },
+    getByApply() {
+      this.loadingshow = true;
+
+      axios
+        .get("/seller/product/advertisement/search/applied", {
+          params: {
+            page:this.currentpage -1,
+            size:this.size,
+            shopName:storage.get("shopName")
+          }
+        })
+        .then(response => {
+          this.loadingshow = false;
+          let products = [];
+          products[0] = response.data.data;
+          this.goods = products;
+          console.log(JSON.stringify(this.goods[0]));
+        })
+        .catch(err => {
+          console.log(err);
+          this.loadingshow = false;
+          this.goods = [];
+          this.$Message.info("there is nothing applied to mail homepage");
+        });
     }
   }
 };

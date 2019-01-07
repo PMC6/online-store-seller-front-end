@@ -1,31 +1,34 @@
 <template>
-  <div class="container " style=" display:flex; height:800px;">
-    <ul class="nav navbar-left navbar-default navSelf col-md-2">
+  <div class="container-fluid snav" style=" display:flex; height:750px; ">
+    <!--  -->
+    <ul class="nav navbar-left navbar-default navSelf col-md-2 col-sm-2 col-xs-2">
       <li>
-        <router-link to="/shopInfo" name="sellerinfors">My Shop</router-link>
+        <router-link :to="myShopLink" name="sanv">My Shop</router-link>
       </li>
-      <li>
-        <router-link to="/managemain">Manage Products</router-link>
+      <li @click="linkRouter">
+        <router-link :to="manageProductLink">Manage Products</router-link>
       </li>
-      <li>
-        <router-link to>Manage Order</router-link>
+      <li @click="linkRouter">
+        <router-link :to="manageAdvertisementLink">Manage Advertisement</router-link>
       </li>
-      <li>
-        <router-link to>Sales History</router-link>
+      <li @click="linkRouter">
+        <router-link :to="manageordersLink">Manage Order</router-link>
       </li>
-      <li>
-        <router-link to>Shop Icom</router-link>
+
+      <li @click="linkRouter">
+        <router-link :to="saleshistoryLink">Sales History</router-link>
       </li>
-      <li>
-        <router-link to>Evaluation View</router-link>
+      <li @click="linkRouter">
+        <router-link :to="shopincomeLink">Shop Income</router-link>
       </li>
     </ul>
-    <div class="col-md-10" style="margin-top:10px; margin-left:15px;">
-      <router-view></router-view>
+    <div class="col-md-10 col-sm-10 col-xs-10" style="margin-left:15px; background-color:rgba(255,255,255,1);">
+      <router-view ></router-view>
     </div>
   </div>
 </template>
 <style scoped>
+
 * {
   margin: 0;
   padding: 0;
@@ -41,51 +44,58 @@
 .navbar-left > li {
   display: block;
   width: 100%;
-  background:rgba(255,255,255,0.5);
-  height: 40px;
-  border: 1px solid #999;
-  border-radius: 5%;
+  background:transparent;
+  height: 50px;
 }
 .navbar-left > li a {
   display: block;
-  color: #000;
+  color: #ccc;
   text-align: center;
-  width: 100%;
+  width:100%;
   height: 100%;
-  line-height: 40px;
+  line-height: 50px;
 }
 .navbar-left {
-  margin-top: 10px;
   height:20%;
 }
 </style>
 <script>
 import axios from 'axios'
-
+import storage from '../model/storage.js'
 export default {
   data() {
     return {
-      myShopLink: '/',
+      myShopLink: '',
+      name:"test",
+      manageProductLink:'',
+      manageAdvertisementLink:'',
+      manageordersLink:'',
+      saleshistoryLink:'',
+      shopincomeLink:''
     }
   },
-  shopRouter(){
-    alert("hello");
+  mounted(){
     axios.get('/seller/shop/info')
-      .then(response=>{
+      .then(()=>{
         this.myShopLink="/shopInfo";
-      }).catch(err=>{
-        this.myShopLink="/";
-    })
+      }).catch(()=>{
+      this.myShopLink="/sellermain";
+    });
+    if (storage.get("role") === "seller"){
+      this.manageProductLink = "/managemain";
+      this.manageAdvertisementLink = "/manageadvertise";
+      this.manageordersLink="/manageorders";
+      this.saleshistoryLink='/saleshistory';
+      this.shopincomeLink="/shopincome"
+    }
+  },
+  methods:{
+    linkRouter(){
+      if (storage.get("role") !== "seller"){
+        this.$Message.error("Sorry, you aren't seller")
+      }
+    }
+
   }
-  // mounted(){
-  //   axios.post('/api/user/login',{
-  //     username:'fenlan',
-  //     password:'fenlan'
-  //   }).then(response=>{
-  //     console.log(response);
-  //   }).catch(error=>{
-  //     console.log(error);
-  //   })
-  // }
 };
 </script>

@@ -1,4 +1,5 @@
 <template>
+<!-- 注册店铺第四步 -->
 <div class="complete-box">
     <div>
          <p>Store application completed, waiting for administrator audit.</p>
@@ -7,7 +8,7 @@
 </div>
    
 </template>
-<style scroped>
+<style scoped>
     .complete-box{
         width:80%;
         height:400px;
